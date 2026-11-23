@@ -3,6 +3,9 @@ import { debounce } from "../../utils/debounce.js";
 const CANVAS_ID = "bouncing_ball_canvas";
 const CANVAS_WRAPPER_ID = "canvas_wrapper";
 
+const BALL_SIZE = 50;
+const DROP_SPEED = 10;
+
 const canvas = document.getElementById(CANVAS_ID);
 const wrapper = document.getElementById(CANVAS_WRAPPER_ID);
 
@@ -13,11 +16,19 @@ const cursor = {
   y: 0,
 };
 
+const ball = {
+  x: 0,
+  y: 0,
+  isDropping: false,
+};
+
 // ----------
 
 controlResize();
 
-drawBallOnMouseMove();
+saveCursorLocationOnMouseMove();
+
+clickToDrop();
 
 loop();
 
@@ -37,18 +48,16 @@ function controlResize() {
   window.addEventListener("resize", debouncedCanvasSize);
 }
 
-function drawBallOnMouseMove() {
+function saveCursorLocationOnMouseMove() {
   canvas.onmousemove = function (event) {
     cursor.x = event.offsetX;
     cursor.y = event.offsetY;
-
-    drawBall();
   };
 }
 
-function drawBall() {
+function drawBall(x, y) {
   ctx.beginPath();
-  ctx.arc(cursor.x, cursor.y, 50, 0, Math.PI * 2);
+  ctx.arc(x, y, BALL_SIZE, 0, Math.PI * 2);
   ctx.fillStyle = "rgb(255, 165, 0)";
   ctx.fill();
 }
@@ -59,7 +68,30 @@ function eraseCanvas() {
 
 function loop() {
   eraseCanvas();
-  drawBall();
+  if (ball.isDropping) {
+    updateBallLocationForDrop();
+  } else {
+    updateBallLocationOnCursor();
+  }
+  drawBall(ball.x, ball.y);
 
   requestAnimationFrame(loop);
+}
+
+function updateBallLocationForDrop() {
+  const floorY = canvas.height - BALL_SIZE;
+  const next = ball.y + DROP_SPEED;
+
+  ball.y = Math.min(floorY, next);
+}
+
+function updateBallLocationOnCursor() {
+  ball.x = cursor.x;
+  ball.y = cursor.y;
+}
+
+function clickToDrop() {
+  canvas.onclick = function () {
+    ball.isDropping = true;
+  };
 }

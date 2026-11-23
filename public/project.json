@@ -1,0 +1,6 @@
+{
+  "id": "01",
+  "title": "Bouncing Ball",
+  "path": "projects/01-bouncing-ball/",
+  "tags": ["canvas2d", "physics"]
+}

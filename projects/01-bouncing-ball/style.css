@@ -1,0 +1,26 @@
+body {
+  margin: 0;
+  padding: 24px;
+  font-family: system-ui, sans-serif;
+  background: #111;
+  color: #eee;
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  box-sizing: border-box;
+}
+
+canvas {
+  display: block;
+  border: 1px solid white;
+  box-sizing: border-box;
+  flex: 1;
+  background-color: #3e3e3e;
+}
+
+#canvas_wrapper {
+  flex: 1;
+  display: inline-flex;
+  box-sizing: border-box;
+  min-height: 0;
+}
